@@ -313,7 +313,7 @@ pub const Loop = struct {
         }
 
         // The list of events, used as both a changelist and eventlist.
-        var events: [256]Kevent = undefined;
+        var events: [1024]Kevent = undefined;
 
         // The number of events in the events array to submit as changes
         // on repeat ticks. Used mostly for efficient disarm.
