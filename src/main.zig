@@ -20,6 +20,10 @@ pub const IOCP = Xev(.iocp, @import("backend/iocp.zig"));
 /// Generic thread pool implementation.
 pub const ThreadPool = @import("ThreadPool.zig");
 
+/// Queue implementations.
+pub const queue = @import("queue.zig");
+pub const queue_mpsc = @import("queue_mpsc.zig");
+
 /// This stream (lowercase s) can be used as a namespace to access
 /// Closeable, Writeable, Readable, etc. so that custom streams
 /// can be constructed.
