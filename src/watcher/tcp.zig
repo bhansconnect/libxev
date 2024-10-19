@@ -80,7 +80,7 @@ pub fn TCP(comptime xev: type) type {
         /// Accept a single connection.
         pub fn accept(
             self: Self,
-            loop: *xev.Loop,
+            loop: ?*xev.Loop,
             c: *xev.Completion,
             comptime Userdata: type,
             userdata: ?*Userdata,
@@ -127,13 +127,15 @@ pub fn TCP(comptime xev: type) type {
                 .epoll => c.flags.dup = true,
             }
 
-            loop.add(c);
+            if (loop) |l| {
+                l.add(c);
+            }
         }
 
         /// Establish a connection as a client.
         pub fn connect(
             self: Self,
-            loop: *xev.Loop,
+            loop: ?*xev.Loop,
             c: *xev.Completion,
             addr: std.net.Address,
             comptime Userdata: type,
@@ -175,7 +177,9 @@ pub fn TCP(comptime xev: type) type {
                 }).callback,
             };
 
-            loop.add(c);
+            if (loop) |l| {
+                l.add(c);
+            }
         }
 
         /// Shutdown the socket. This always only shuts down the writer side. You
@@ -183,7 +187,7 @@ pub fn TCP(comptime xev: type) type {
         /// platform supports it.
         pub fn shutdown(
             self: Self,
-            loop: *xev.Loop,
+            loop: ?*xev.Loop,
             c: *xev.Completion,
             comptime Userdata: type,
             userdata: ?*Userdata,
@@ -221,7 +225,9 @@ pub fn TCP(comptime xev: type) type {
                 }).callback,
             };
 
-            loop.add(c);
+            if (loop) |l| {
+                l.add(c);
+            }
         }
 
         pub const AcceptError = xev.AcceptError;

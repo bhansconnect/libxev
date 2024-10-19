@@ -46,7 +46,7 @@ pub fn Closeable(comptime xev: type, comptime T: type, comptime options: Options
         /// Close the socket.
         pub fn close(
             self: Self,
-            loop: *xev.Loop,
+            loop: ?*xev.Loop,
             c: *xev.Completion,
             comptime Userdata: type,
             userdata: ?*Userdata,
@@ -80,7 +80,9 @@ pub fn Closeable(comptime xev: type, comptime T: type, comptime options: Options
                 }).callback,
             };
 
-            loop.add(c);
+            if (loop) |l| {
+                l.add(c);
+            }
         }
     };
 }
@@ -97,7 +99,7 @@ pub fn Readable(comptime xev: type, comptime T: type, comptime options: Options)
         /// that depending on the backend, the reads can happen out of order.
         pub fn read(
             self: Self,
-            loop: *xev.Loop,
+            loop: ?*xev.Loop,
             c: *xev.Completion,
             buf: xev.ReadBuffer,
             comptime Userdata: type,
@@ -183,7 +185,9 @@ pub fn Readable(comptime xev: type, comptime T: type, comptime options: Options)
                         },
                     }
 
-                    loop.add(c);
+                    if (loop) |l| {
+                        l.add(c);
+                    }
                 },
             }
         }
@@ -350,7 +354,7 @@ pub fn Writeable(comptime xev: type, comptime T: type, comptime options: Options
         /// If ordering is important, use queueWrite instead.
         pub fn write(
             self: Self,
-            loop: *xev.Loop,
+            loop: ?*xev.Loop,
             c: *xev.Completion,
             buf: xev.WriteBuffer,
             comptime Userdata: type,
@@ -385,7 +389,9 @@ pub fn Writeable(comptime xev: type, comptime T: type, comptime options: Options
                 }
             }).callback;
 
-            loop.add(c);
+            if (loop) |l| {
+                l.add(c);
+            }
         }
 
         /// Extracts the result from a completion for a write callback.
