@@ -180,7 +180,7 @@ pub const Loop = struct {
             .callback = cb,
         };
 
-        self.add(c);
+        // self.add(c);
     }
 
     /// See io_uring.timer_reset for docs.
